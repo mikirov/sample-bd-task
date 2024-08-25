@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #addRow {
+            margin-bottom: 20px;
+        }
+
+        #paginationControls {
+            margin-top: 20px;
+        }
+
+        #actionButtons {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Table Editor</h1>
+
+    <!-- Add Row Button -->
+    <button id="addRow">Add Row</button>
+
+    <!-- Table Structure -->
+    <table id="tableView"></table>
+
+    <!-- Pagination Controls -->
+    <div id="paginationControls"></div>
+
+    <!-- Action Buttons for Submit and Cancel -->
+    <div id="actionButtons"></div>
+
+    <!-- Include your JavaScript file -->
+    <script src="js/config.js"></script>
+    <script src="js/table.js"></script>
+</body>
+</html>
