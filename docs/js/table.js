@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", async function() {
+    let API_BASE_URL;
+
+    if (window.location.hostname === 'localhost') {
+        // Running locally
+        API_BASE_URL = 'http://localhost:3000';
+    } else {
+        //deployed
+        API_BASE_URL = 'https://young-headland-02551-20b4a3f00085.herokuapp.com'; // Replace with your actual backend URL
+    }
+
     let currentPage = 1;
     const limit = 10; // Items per page
 

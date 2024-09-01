@@ -1,6 +1,16 @@
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
+    let API_BASE_URL;
+
+    if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+        // Running locally
+        API_BASE_URL = 'http://localhost:3000';
+    } else {
+        //deployed
+        API_BASE_URL = 'https://young-headland-02551-20b4a3f00085.herokuapp.com'; // Replace with your actual backend URL
+    }
+
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const table = document.getElementById("table").value;
