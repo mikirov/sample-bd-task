@@ -1,63 +1,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pool = require('../models/db');
-const crypto = require('crypto');
 
-const authenticateToken = require('../middleware/authenticateToken');
+const verifyToken = require('../middleware/verifyToken');
 const router = express.Router();
-
-/**
- * @swagger
- * /api/register:
- *   post:
- *     summary: Register a new user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: User registered successfully
- *       400:
- *         description: Bad request, e.g., user already exists
- *       500:
- *         description: Internal server error
- */
-router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' });
-    }
-
-    try {
-        // Check if the user already exists
-        const [existingUser] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
-
-        if (existingUser.length > 0) {
-            return res.status(400).json({ error: 'Username already exists' });
-        }
-
-        // Hash the password using SHA-256
-        const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
-
-        // Insert the new user into the database
-        await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
 
 /**
  * @swagger
@@ -109,7 +55,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
 /**
  * @swagger
  * /api/verify-token:
@@ -125,8 +70,6 @@ router.post('/login', async (req, res) => {
  *       403:
  *         description: Token is invalid or expired
  */
-router.get('/verify-token', authenticateToken, (req, res) => {
-    // If the middleware passed, the token is valid
-    res.status(200).json({ valid: true, user: req.user });
-});
+router.get('/verify-token', verifyToken);
+
 module.exports = router;

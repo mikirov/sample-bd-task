@@ -45,11 +45,27 @@ const swaggerOptions = {
     apis: ['./routes/*.js'], // Path to your API routes files
 };
 
-app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Replace with your frontend URL
-    methods: 'GET,POST,PUT,DELETE',
-    credentials: true,
-}));
+// Conditional CORS configuration
+if (process.env.NODE_ENV === 'development') {
+    app.use(cors({
+        origin: (origin, callback) => {
+            if (!origin || origin === 'null') {
+                // Allow requests with null origin, for local file access
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true,
+    }));
+} else {
+    // Restrict CORS for production
+    app.use(cors({
+        origin: process.env.FRONTEND_URL,
+        methods: 'GET,POST,PUT,DELETE',
+        credentials: true
+    }));
+}
 
 
 app.use(bodyParser.json());
