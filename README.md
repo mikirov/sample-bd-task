@@ -47,6 +47,6 @@ You can log in using the credentials `johndoe`, `password` and `users`
 # Deploy server to heroku:
 - There is an automatic build pipeline on push to heroku main. You can do that using:
 ```
-git subtree push --prefix backend heroku main
+git push heroku main
 ```
 
