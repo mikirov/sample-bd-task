@@ -3,10 +3,15 @@ const morgan = require('morgan');
 const logger = require('./utils/logger');
 const bodyParser = require('body-parser');
 const cors = require('cors'); // Import cors
-const authRoutes = require('./routes/auth');
-const tableRoutes = require('./routes/tables');
+const loginRoutes = require('./routes/login');
+const refreshTokenRoutes = require('./routes/auth');
+const tableRoutes = require('./routes/table');
+const tablesRoutes = require('./routes/tables');
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+
+const verifyToken = require('./middleware/verifyToken');
 
 require('dotenv').config();
 
@@ -49,7 +54,7 @@ const swaggerOptions = {
 if (process.env.NODE_ENV === 'development') {
     app.use(cors({
         origin: (origin, callback) => {
-            if (!origin || origin === 'null') {
+            if (!origin || origin === 'null' || origin === 'http://localhost:3000') {
                 // Allow requests with null origin, for local file access
                 callback(null, true);
             } else {
@@ -81,8 +86,14 @@ app.use((req, res, next) => {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use('/api', authRoutes);
+
+app.use('/api', loginRoutes);
+
+app.use('/api', verifyToken);
+
+app.use('/api', refreshTokenRoutes);
 app.use('/api', tableRoutes);
+app.use('/api', tablesRoutes);
 
 
 const PORT = process.env.PORT || 3000;
